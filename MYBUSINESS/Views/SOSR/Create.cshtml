@@ -17,37 +17,29 @@
 <script>
 
 </script>
+
+
+<style>
+    .table-wrapper2 {
+        margin: 30px auto;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+    }
+</style>
 @*<h2>Create</h2>*@
 
 @* @using (Html.BeginForm(null, null, FormMethod.Post, new { name = "SOEdit", id = "SOEdit" })) *@
 @using (Html.BeginForm("Create", "SOSR", FormMethod.Post, new { name = "SOCreate", id = "SOCreate" }))
 
 {
-    //var myBoolValue = @Viewbag.IsReturn.ToString().ToLower();
-    int custId = 0;
-    string custName = "";
-
-    //if (Session["CurrentUser"] != null)
-    //{
-    //    MYBUSINESS.Models.Employee user = (MYBUSINESS.Models.Employee)HttpContext.Current.Session["CurrentUser"];
-
-    //    if (user.Login == "LahoreKarachi")
-    //    {
-    //        custId = 10;
-    //        custName = Model.Customers.FirstOrDefault(x => x.Id == 10).Name;
-    //    }
-    //    else
-    //    {
-    //        custId = 3;
-    //        custName = Model.Customers.FirstOrDefault(x => x.Id == 3).Name;
-    //    }
-    //}
+   
 
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <div class="container" id="container">
-        <div class="table-wrapper">
+        <div class="table-wrapper2">
             <div class="table-title">
                 <div class="row">
                     <div id="saleOrder" class="col-sm-offset-5"><h2>Sale <b>Order</b></h2></div>
@@ -64,19 +56,17 @@
                 @*<input type="hidden" name="SaleOrder.CustomerId" id="idnCustomer" value="@custId" />*@
                 <input type="hidden" name="SaleOrder.CustomerId" id="idnCustomer" value="" />
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-md-6">
+
                         <h5><b>Customer Name</b></h5>
-                        @*@{
-                                var abc = Model.SaleOrder.Employee.Login;
-                                //Employee emp = (Employee)Session["CurrentUser"];
-                                //sO.EmployeeId = emp.Id;
-                            }*@
+                       
                         @*<input type="text" autocomplete="off" class="form-control" name="Customer.Name" id="customer" value="@(custName)" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" title="Type customer name">*@
                         <input type="text" autocomplete="off" class="form-control" name="Customer.Name" id="customer" value="" placeholder="Type customer name" data-toggle="tooltip" data-placement="top" title="Type customer name">
                         <font size="1">Or <a id="OpenNewCustForm" href="#">Add New Customer</a></font>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-md-6">
+
                         <h5><b>Address</b></h5>
                         <input type="text" autocomplete="off" class="form-control" name="Customer.Address" id="customerAddress" readonly tabindex="-1">
                     </div>
@@ -91,12 +81,8 @@
                 <thead>
                     <tr>
                         <th style="width:5%;">#</th>
-                        @*<th>
-                                Hidden
-                            </th>*@
-                        @*<th>
-                                @Html.DisplayNameFor(model => model.Product.Id)
-                            </th>*@
+                        @*<th>Hidden</th>*@
+                        @*<th>@Html.DisplayNameFor(model => model.Product.Id)</th>*@
 
                         <th style="width:25%;">
                             @Html.DisplayNameFor(model => model.Product.Name)
@@ -176,209 +162,95 @@
             </div>
 
             <div style="display:inline" id="dvCalculations">
-                <table id="grandTotal" class="borderless">
-                    <thead>
-                        <tr>
-                            <th style="width:5%;">
-                                @*@Html.DisplayNameFor(model => model.SaleOrderDetail.Product.Name)*@
-                            </th>
-                            <th style="width:50%;">
-                                @*@Html.DisplayNameFor(model => model.SaleOrderDetail.Product.SalePrice)*@
-                            </th>
-                            <th style="width:5%;">
-                                @*@Html.DisplayNameFor(model => model.SaleOrderDetail.Quantity)*@
-                            </th>
-                            <th style="width:25%;">
-                                @*Item Total*@
-                            </th>
-                            <th style="width:20%;">
+                <div class="row" style="margin-top:30px;">
+                    <div class="col-md-6">
+                        @Html.DropDownList("SaleOrder.BankAccountId", (IEnumerable<SelectListItem>)ViewBag.BankAccounts, null, new { @class = "form-control" })
+                        <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
+                            <option value="Cash" selected>Cash</option>
+                            <option value="Online">Online</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want">
+                        <textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea>
+                        <textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea>
+                    </div>
+                    <div class="col-md-6" style="margin-top:20px;">
 
-                            </th>
-                            <th style="width:5%;">
-                                @*Actions*@
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="rOrderTotal">
-                            @*@Html.DisplayNameFor(model => model.SaleOrder.Balance.Product.SalePrice)*@
-
-                            @*<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a product">*@
-                            <td>
-                            </td>
-
-
-                            <td><input type="text" readonly class="form-control classBorder0" name="gt1" id="gt1" tabindex="-1"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="gt2" id="gt2" tabindex="-1"></td>
-
-                            <td><input type="text" readonly class="form-control classBorder0" name="OrderTotal" id="OrderTotal" value="Order Total" tabindex="-1"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal" value="0" tabindex="-1"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="gt5" id="gt5" tabindex="-1"></td>
-
-                        </tr>
-                        @*<tr id="rReturnTotal">
-                                <td></td>
-                                <td><input type="text" readonly class="form-control classBorder0" name="rgt1" id="rgt1" tabindex="-1"></td>
-                                <td><input type="text" readonly class="form-control classBorder0" name="rgt2" id="rgt2" tabindex="-1"></td>
-
-                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
-                                <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
-                                <td><input type="text" readonly class="form-control classBorder0" name="rgt5" id="rgt5" tabindex="-1"></td>
-
-                            </tr>*@
-
-                        <tr id="rDiscount">
-                            <td></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="dc1" id="dc1" tabindex="-1"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="dc2" id="dc2" tabindex="-1"></td>
-
-                            <td><input type="text" readonly class="form-control classBorder0" name="dc3" id="dc3" value="Order Discount" tabindex="-1"></td>
-                            <td><input type="text" autocomplete="off" class="form-control" name="SaleOrder.Discount" id="discount" value="0"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="dc5" id="dc5" tabindex="-1"></td>
-
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>@Html.DropDownList("SaleOrder.BankAccountId", (IEnumerable<SelectListItem>)ViewBag.BankAccounts, null, new { @class = "form-control" })</td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="st2" id="st2" tabindex="-1"></td>
-
-                            <td><b><input type="text" readonly class="form-control classBorder0" name="st3" id="st3" value="Sub Total" tabindex="-1"></b></td>
-                            <td><b><input type="text" readonly class="form-control classBorder0" name="subtotal" id="subtotal" value="0" tabindex="-1"></b></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="st5" id="st5" tabindex="-1"></td>
-
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <select class="form-control" name="SaleOrder.PaymentMethod" id="SaleOrder.PaymentMethod" data-toggle="tooltip" data-placement="top" title="Select Payment method">
-                                    <option value="Cash" selected>Cash</option>
-                                    <option value="Online">Online</option>
-                                    <option value="Cheque">Cheque</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="pb2" id="pb2" tabindex="-1"></td>
-
-                            <td><input type="text" readonly class="form-control classBorder0" name="pb3" id="pb3" value="Prev. Balance" tabindex="-1"></td>
-                            <td><input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.PrevBalance" id="PreviousBalance" value="0" tabindex="-1"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="pb5" id="pb5" tabindex="-1"></td>
-
-                        </tr>
-
-                        <tr>
-                            <td></td>
-                            <td><input type="text" autocomplete="off" class="form-control" name="SaleOrder.PaymentDetail" id="SaleOrder.PaymentDetail" value="" placeholder="Cheque No./Online payment No./etc..." data-toggle="tooltip" data-placement="top" title="Enter any details you want"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="tt2" id="tt2" tabindex="-1"></td>
-
-                            <td><b><input type="text" readonly class="form-control classBorder0" name="tt3" id="tt3" value="Total" tabindex="-1"></b></td>
-                            <td><b><input type="text" readonly class="form-control classBorder0" name="total" id="total" value="0" tabindex="-1"></b></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="tt5" id="tt5" tabindex="-1"></td>
-
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><textarea name="SaleOrder.Remarks" rows="1" cols="100" class="form-control" placeholder="These remarks will print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will print on bill"></textarea></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="pd2" id="pd2" tabindex="-1"></td>
-
-                            <td style="background-color: #c5deed;"><input type="text" readonly class="form-control classBorder0" name="pd3" id="pd3" value="Paid" tabindex="-1"></td>
-                            <td style="        background-color: #c5deed;"><input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="paid" value="0"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="pd5" id="pd5" tabindex="-1"></td>
-
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><textarea name="SaleOrder.Remarks2" rows="1" cols="100" class="form-control" placeholder="These remarks will not print on bill" data-toggle="tooltip" data-placement="top" title="These remarks will not print on bill"></textarea></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="bl2" id="bl2" tabindex="-1"></td>
-
-                            <td><input type="text" readonly class="form-control classBorder0" name="bl3" id="bl3" value="Balance" tabindex="-1"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="SaleOrder.Balance" id="balance" value="0" tabindex="-1"></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="bl5" id="bl5" tabindex="-1"></td>
-
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="el1_2" id="el1_2" tabindex="-1"></td>
-                            <td></td>
-                            <td colspan="2" rowspan="2"><button type="submit" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 430px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: auto; margin-bottom: 0%; font-size: 32px;">Pay</button></td>
-                            @*<td></td>*@
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="text" readonly class="form-control classBorder0" name="el2_2" id="el2_2" tabindex="-1"></td>
-                            <td></td>
-                            <td></td>
-                            @*<td></td>*@
-                            <td></td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-
-
-
+                        <table>
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" readonly class="form-control classBorder0" name="OrderTotal" id="OrderTotal" value="Order Total" tabindex="-1"></td>
+                                    <td><input type="text" readonly class="form-control classBorder0" name="SaleOrder.BillAmount" id="ItemsTotal" value="0" tabindex="-1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" readonly class="form-control classBorder0" name="ReturnTotal" id="ReturnTotal" value="Return Total" tabindex="-1"></td>
+                                    <td><input type="text" readonly class="form-control classBorder0" name="ReturnItemsTotal" id="ReturnItemsTotal" value="0" tabindex="-1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" readonly class="form-control classBorder0" name="dc3" id="dc3" value="Order Discount" tabindex="-1"></td>
+                                    <td><input type="text" autocomplete="off" class="form-control" name="SaleOrder.Discount" id="discount" value="0"></td>
+                                </tr>
+                                <tr class="text-bold">
+                                    <td><b><input type="text" readonly class="form-control classBorder0" name="st3" id="st3" value="Sub Total" tabindex="-1"></b></td>
+                                    <td><b><input type="text" readonly class="form-control classBorder0" name="subtotal" id="subtotal" value="0" tabindex="-1"></b></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" readonly class="form-control classBorder0" name="pb3" id="pb3" value="Prev. Balance" tabindex="-1"></td>
+                                    <td><input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.PrevBalance" id="PreviousBalance" value="0" tabindex="-1"></td>
+                                </tr>
+                                <tr class="text-bold">
+                                    <td><b><input type="text" readonly class="form-control classBorder0" name="tt3" id="tt3" value="Total" tabindex="-1"></b></td>
+                                    <td><b><input type="text" readonly class="form-control classBorder0" name="total" id="total" value="0" tabindex="-1"></b></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #c5deed;"><input type="text" readonly class="form-control classBorder0" name="pd3" id="pd3" value="Paid" tabindex="-1"></td>
+                                    <td style="        background-color: #c5deed;"><input type="text" autocomplete="off" class="form-control" name="SaleOrder.BillPaid" id="paid" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" readonly class="form-control classBorder0" name="bl3" id="bl3" value="Balance" tabindex="-1"></td>
+                                    <td><input readonly type="text" autocomplete="off" class="form-control" name="SaleOrder.Balance" id="balance" value="0" tabindex="-1"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" rowspan="2"><button type="submit" id="CreateSO" class="btn btn-primary" style="background-color: #2bbdb9; width: 300px; height: 70px; margin-left: auto; margin-right: auto; display: block; margin-top: 10px; margin-bottom: 0%; font-size: 32px;">Pay</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
                 <div class="table-title">
-
                     <div class="row">
                         @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
                         <div class="col-sm-3">
-
                         </div>
                         <div class="col-sm-7">
                             @*<textarea name="SaleOrder.PaymentMethod" rows="1" cols="100" class="form-control" placeholder="Payment method..."></textarea>*@
-
                         </div>
-
-
                     </div>
-
                     <div class="row">
                         @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
                         <div class="col-sm-3">
 
                         </div>
                         <div class="col-sm-7">
-
                         </div>
-
-
                     </div>
-
-
-
-                    <div class="row">
-                        @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
-
-                        <div class="col-sm-3">
-
-                        </div>
-                        <div class="col-sm-7">
-
-                        </div>
-
-
-
-                    </div>
-
                     <div class="row">
                         @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
                         <div class="col-sm-3">
-
                         </div>
                         <div class="col-sm-7">
-
                         </div>
-
-
-
-
-
-
+                    </div>
+                    <div class="row">
+                        @*<div class="col-sm-8"><h2>Sale <b>Order</b></h2></div>*@
+                        <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-7">
+                        </div>
                         <div class="col-sm-2">
-
                         </div>
                     </div>
                 </div>
@@ -510,7 +382,7 @@
     @*}*@
 </div>
 @{Html.RenderPartial("_ProductDetail", new List<MYBUSINESS.Models.ProductDetail>()); }
-<div>
+<div class="text-center">
     @Html.ActionLink("Back to List", "Index")
 </div>
 
@@ -528,6 +400,7 @@
         closeText: '', //Changes the text of the titlebar-close button to hello instead of default Close
         width: 500,
         Height:500
+
     });
 
     function FetchProductRentStatus() {
